@@ -1,0 +1,9 @@
+Create Download Schedule
+
+As a non-technical church radio broadcaster
+I want to create a broadcasting schedule
+so that I can have the files available for when they're needed.
+
+Satisfaction Criteria:
+1. I can specify what time I would like the files available to RadioDJ. (broadcast schedule)
+2. I can schedule downloads for at least one week in the future.

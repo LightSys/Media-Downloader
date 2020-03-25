@@ -1,0 +1,12 @@
+Specify File Locations
+
+As a non-technical church radio broadcaster
+I want to specify locations where I find files to broadcast
+so that I can get the latest files when they're available.
+
+Satisfaction Criteria:
+1. I can specify a location on the server to download from.
+2. The location may be a specific path.
+3. The location may change based on the date.
+4. I can specify what time I believe the file gets updated/uploaded.
+5. An error log should kept for failed downloads.

@@ -1,0 +1,11 @@
+Manual Download
+
+As a non-technical church radio broadcaster
+I want to download files manually from a remote server
+so that I can manipulate them locally.
+
+Satisfaction Criteria:
+1. I can connect (and login) to FTP, SFTP, and Dropbox file servers.
+2. I can locate the file(s) I'm looking for on the remote server.
+3. I can choose where the files should be saved on my local machine.
+4. An error log should kept for failed downloads.

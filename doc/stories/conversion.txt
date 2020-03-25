@@ -1,0 +1,9 @@
+File Conversion
+
+As a non-technical church radio broadcaster
+I want to be able to import files into RadioDJ
+so that I can brodcast them using RadioDJ.
+
+Satisfaction Criteria:
+1. The system can convert files into a form that RadioDJ can handle.
+2. The system can organize the files into a structure that RadioDJ can handle.

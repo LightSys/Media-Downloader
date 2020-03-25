@@ -1,0 +1,30 @@
+﻿1. The software must be able to connect with several kinds of file servers
+   1. FTP
+   2. SFTP
+   3. Local file transfer (where the file is stored on the local storage drive, and copied to the active drive)
+   4. Dropbox 
+2. The software must provide a way for users to locate the files they need on remote servers
+   1. This might be accomplished with a graphical file browser
+3. The software must  allow the user to define which files will be needed at least a week ahead of the current time.
+4. The software must provide a way for the user to define the present and future location of remote files.
+   1. The user must be able to define the following things about a certain file:
+      1. What server is the file on?
+      2. What are the credentials for that server?
+      3. What protocols and certificates does the server use?
+      4. Is the file name and location the same every week or different?
+         1. If a date code is used, what format is it in?
+         2. If the folder that the file is in changes every week, how does it change?
+      5. When do the files become available each week?
+5. The files specified by the user must be organized so that they can easily be imported by Radio DJ
+   1. Downloaded files must be converted into a consistent file format.
+   2. Downloaded files must be named in a way that Radio DJ understands.
+   3. Files must be in a folder structure that makes sense to humans and Radio DJ
+
+Potential Additional Features
+- checksum to avoid duplicate download
+- specify end time of availability
+- scan email for audio files
+- FileSystemWatchers for each directory
+- Option for Sync on Schedule vs interval vs watch directory
+   - Create Schedule based on RadioDJ's db?
+- "Meet MoveCute, the Cute File Mover."
