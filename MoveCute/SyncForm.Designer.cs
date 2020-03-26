@@ -37,7 +37,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SaveBtn = new System.Windows.Forms.Button();
             this.CancelBtn = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.SampleBox = new System.Windows.Forms.TextBox();
             this.SrcLbl = new System.Windows.Forms.Label();
             this.DestLbl = new System.Windows.Forms.Label();
             this.MatchLbl = new System.Windows.Forms.Label();
@@ -62,12 +62,12 @@
             // 
             // SrcFileDlg
             // 
-            this.SrcFileDlg.FileName = "openFileDialog1";
+            this.SrcFileDlg.FileName = "program.mp3";
             this.SrcFileDlg.FileOk += new System.ComponentModel.CancelEventHandler(this.SrcFileDlg_FileOk);
             // 
             // DestFileDlg
             // 
-            this.DestFileDlg.FileName = "openFileDialog2";
+            this.DestFileDlg.FileName = "program.mp3";
             this.DestFileDlg.FileOk += new System.ComponentModel.CancelEventHandler(this.DestFileDlg_FileOk);
             // 
             // SrcBtn
@@ -121,14 +121,15 @@
             this.CancelBtn.UseVisualStyleBackColor = true;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
-            // textBox3
+            // SampleBox
             // 
-            this.textBox3.Location = new System.Drawing.Point(15, 90);
-            this.textBox3.Multiline = true;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(324, 23);
-            this.textBox3.TabIndex = 7;
+            this.SampleBox.Location = new System.Drawing.Point(15, 90);
+            this.SampleBox.Multiline = true;
+            this.SampleBox.Name = "SampleBox";
+            this.SampleBox.ReadOnly = true;
+            this.SampleBox.Size = new System.Drawing.Size(324, 23);
+            this.SampleBox.TabIndex = 7;
+            this.SampleBox.WordWrap = false;
             // 
             // SrcLbl
             // 
@@ -175,7 +176,7 @@
             this.Controls.Add(this.MatchLbl);
             this.Controls.Add(this.DestLbl);
             this.Controls.Add(this.SrcLbl);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.SampleBox);
             this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.SaveBtn);
             this.Controls.Add(this.label1);
@@ -201,7 +202,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button SaveBtn;
         private System.Windows.Forms.Button CancelBtn;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox SampleBox;
         private System.Windows.Forms.Label SrcLbl;
         private System.Windows.Forms.Label DestLbl;
         private System.Windows.Forms.Label MatchLbl;

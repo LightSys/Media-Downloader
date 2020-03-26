@@ -28,7 +28,6 @@ namespace MoveCute
             SrcBox.Text = fs.SrcMacro;
             DestBox.Text = fs.DestPath;
             Text = "Edit File Sync";
-            //TODO refresh macro preview?
         }
 
         private void SrcBtn_Click(object sender, EventArgs e)
@@ -63,6 +62,16 @@ namespace MoveCute
         private void SrcBox_TextChanged(object sender, EventArgs e)
         {
             UpdateSaveBtnEnabled();
+            if (string.IsNullOrWhiteSpace(SrcBox.Text)) return;
+            SampleBox.Clear();
+            try
+            {
+                SampleBox.Text = FileSync.EvaluateMacro(SrcBox.Text);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
         private void DestBox_TextChanged(object sender, EventArgs e)
         {
@@ -73,6 +82,5 @@ namespace MoveCute
         {
             SaveBtn.Enabled = !string.IsNullOrWhiteSpace(SrcBox.Text) && !string.IsNullOrWhiteSpace(DestBox.Text);
         }
-
     }
 }

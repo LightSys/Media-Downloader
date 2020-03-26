@@ -34,31 +34,12 @@ namespace MoveCute
             LogLine("file changed");
         }
 
-        public void CopyFile(string srcpath, string destpath)
-        {
-            try
-            {
-                if (!File.Exists(srcpath)) throw new Exception(srcpath + " doesn't exist.");
-
-                // Ensure that the target does not exist.
-                if (File.Exists(destpath)) File.Delete(destpath);
-
-                // Copy the file.
-                File.Copy(srcpath, destpath);
-                LogLine(srcpath + " was copied to " + destpath + ".");
-
-            }
-            catch (Exception ex)
-            {
-                LogLine("Failed while moving file:" + ex.ToString());
-            }
-
-        }
         private void SyncList_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool selectionExists = SyncLst.SelectedIndex > -1;
             DeleteBtn.Enabled = selectionExists;
             EditBtn.Enabled = selectionExists;
+            SyncBtn.Enabled = selectionExists;
         }
 
         private void DrawSyncListBoxItem(object sender, DrawItemEventArgs e)
@@ -116,13 +97,59 @@ namespace MoveCute
                 LogLine("Nothing selected to delete.");
                 return;
             }
+
             SyncLst.Items.Remove(SyncLst.SelectedItem);
+            
+            if (SyncLst.SelectedItem == null) AddBtn.Focus(); //avoid default focus on "Sync All"
         }
 
         private void SyncLst_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (SyncLst.IndexFromPoint(e.Location) == ListBox.NoMatches) return;
             EditBtn_Click(sender, e);
+        }
+
+        public void CopyFile(FileSync fs)
+        {
+            try
+            {
+                if (!File.Exists(fs.SrcPath)) throw new Exception(fs.SrcPath + " doesn't exist.");
+
+                // Ensure that the target does not exist.
+                if (File.Exists(fs.DestPath)) File.Delete(fs.DestPath);
+
+                // Copy the file.
+                File.Copy(fs.SrcPath, fs.DestPath);
+                LogLine(fs.SrcPath + " was copied to " + fs.DestPath + ".");
+            }
+            catch (ArgumentException)
+            {
+                LogLine("Bad Source Macro: " + fs.SrcMacro);
+            }
+            catch (Exception ex)
+            {
+                LogLine("Failed while moving file:" + ex.ToString());
+            }
+        }
+
+        private void SyncBtn_Click(object sender, EventArgs e)
+        {
+            if (SyncLst.SelectedItem == null) LogLine("Nothing selected to sync.");
+            CopyFile((FileSync)SyncLst.SelectedItem);
+        }
+
+        private void SyncAllBtn_Click(object sender, EventArgs e)
+        {
+            if (SyncLst.Items.Count == 0)
+            {
+                LogLine("Nothing to sync.");
+                return;
+            }
+
+            foreach (FileSync fs in SyncLst.Items)
+            {
+                CopyFile(fs);
+            }
         }
     }
 }
