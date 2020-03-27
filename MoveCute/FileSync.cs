@@ -57,10 +57,6 @@ namespace MoveCute
                 return "";
             }
             
-            Console.WriteLine("\r\n\r\n\r\n");
-            Console.WriteLine("potentials:");
-            foreach (string path in potentialMatches) Console.WriteLine(path);
-
             string dateFormat = "";
             Regex pathMatcher = GenerateFilterRegex(macro, ref dateFormat);
             
@@ -71,25 +67,12 @@ namespace MoveCute
             //TODO: Add other selection criteria (currently only closest to current date and not future)
             //TODO: maybe expose some var which says whether or not a valid future match was found
 
-            Console.WriteLine("df: " + dateFormat);
-            Console.WriteLine("files: ");
             foreach (string path in potentialMatches)
             {
-                Console.Write(path);
+                if (!pathMatcher.IsMatch(path)) continue;
 
-                if (!pathMatcher.IsMatch(path))
-                {
-                    Console.WriteLine("");
-                    continue;
-                }
-
-                Console.Write("<---matches");
-
-                if (dateFormat == "")
-                {
-                    Console.WriteLine("");
-                    return path; // no format string provided, return first match
-                }
+                if (dateFormat == "") return path; // no format string provided, return first match
+                                                   // not handled here: only literals in dateFormat
                 
                 DateTime fileDate = CalculateFileDate(pathMatcher, path, dateFormat);
 
@@ -97,21 +80,18 @@ namespace MoveCute
 
                 TimeSpan diff = now - fileDate;
 
-                Console.Write(diff.TotalMinutes);
                 if (fileDate < now && diff < shortestSpan)
                 {
                     shortestSpan = diff;
                     output = path;
                 }
                 
-                Console.WriteLine("");
             }
 
             if (output == "") return "";
 
             return output;
         }
-
 
         public static string[] FindPotentialFileMatches(string macro)
         {
@@ -250,8 +230,6 @@ namespace MoveCute
             for (int i = 1; i < groups.Count; i++) //skip index 0, which contains full match
             {
                 Group group = groups[i];
-                var unit = group.Value;
-
                 pathDateString += group.Value + "&";
             }
             return pathDateString;

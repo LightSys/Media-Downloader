@@ -190,6 +190,7 @@
             this.Controls.Add(this.SrcBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.HelpButton = true;
+            this.MaximizeBox = false;
             this.Name = "SyncForm";
             this.Text = "New File Sync";
             this.ResumeLayout(false);

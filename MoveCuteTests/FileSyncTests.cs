@@ -21,7 +21,7 @@ namespace MoveCuteTests
             Assert.AreEqual(FileSync.GetRegexFromDateUnit("ss", ref dateFormat), @"\d{2}");
             Assert.AreEqual(FileSync.GetRegexFromDateUnit("s", ref dateFormat), @"\d{1,2}");
             Assert.AreEqual(FileSync.GetRegexFromDateUnit("tt", ref dateFormat), @"[AP]M");
-            Assert.AreEqual(dateFormat, @"yyyy-h-HH-H-mm-m-ss-s-tt-");
+            Assert.AreEqual(dateFormat, @"yyyy&h&HH&H&mm&m&ss&s&tt&");
         }
 
         [TestMethod]
@@ -29,37 +29,37 @@ namespace MoveCuteTests
         {
             string dateFormat = "";
             Assert.AreEqual(FileSync.GetRegexFromDateUnit("f", ref dateFormat), "f");
-            Assert.AreEqual(dateFormat, "'f'");
+            Assert.AreEqual(dateFormat, "'f'&");
 
             dateFormat = "";
             Assert.AreEqual(FileSync.GetRegexFromDateUnit("ff", ref dateFormat), "ff");
-            Assert.AreEqual(dateFormat, "'ff'");
+            Assert.AreEqual(dateFormat, "'ff'&");
 
             dateFormat = "";
             Assert.AreEqual(FileSync.GetRegexFromDateUnit("asdf", ref dateFormat), "asdf");
-            Assert.AreEqual(dateFormat, "'asdf'");
+            Assert.AreEqual(dateFormat, "'asdf'&");
 
             dateFormat = "";
             Assert.AreEqual(FileSync.GetRegexFromDateUnit(" ", ref dateFormat), @"\ ");
-            Assert.AreEqual(dateFormat, "' '");
+            Assert.AreEqual(dateFormat, "' '&");
 
             dateFormat = "";
             Assert.AreEqual(FileSync.GetRegexFromDateUnit("*", ref dateFormat), @"\*");
-            Assert.AreEqual(dateFormat, "'*'");
+            Assert.AreEqual(dateFormat, "'*'&");
 
             dateFormat = "";
             Assert.AreEqual(FileSync.GetRegexFromDateUnit("#", ref dateFormat), @"\#");
-            Assert.AreEqual(dateFormat, "'#'");
+            Assert.AreEqual(dateFormat, "'#'&");
         }
 
         [TestMethod]
         public void TestGetTokenRegexStr()
         {
             string dateFormat = "";
-            Assert.AreEqual(FileSync.GetTokenRegexStr("yy-MM-dd", ref dateFormat), @"(\d{2}-\d{2}-\d{2})");
+            Assert.AreEqual(FileSync.GetTokenRegexStr("yy-MM-dd", ref dateFormat), @"(\d{2})(-)(\d{2})(-)(\d{2})");
             Assert.AreEqual(FileSync.GetTokenRegexStr("d", ref dateFormat), @"(\d{1,2})");
-
         }
+
         [TestMethod]
         public void TestExtractDateStringSuccess()
         {

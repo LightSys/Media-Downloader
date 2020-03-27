@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MoveCuteForm));
             this.EditBtn = new System.Windows.Forms.Button();
             this.LogBox = new System.Windows.Forms.TextBox();
-            this.FileSystemWatcher = new System.IO.FileSystemWatcher();
             this.SyncBtn = new System.Windows.Forms.Button();
             this.SyncList = new System.Windows.Forms.ListBox();
             this.AddBtn = new System.Windows.Forms.Button();
@@ -44,7 +43,6 @@
             this.FreqLabel = new System.Windows.Forms.Label();
             this.FreqValueDisplay = new System.Windows.Forms.Label();
             this.LogLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.FileSystemWatcher)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ArrowPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FreqTrackBar)).BeginInit();
             this.SuspendLayout();
@@ -52,9 +50,9 @@
             // EditBtn
             // 
             this.EditBtn.Enabled = false;
-            this.EditBtn.Location = new System.Drawing.Point(592, 293);
+            this.EditBtn.Location = new System.Drawing.Point(592, 284);
             this.EditBtn.Name = "EditBtn";
-            this.EditBtn.Size = new System.Drawing.Size(95, 27);
+            this.EditBtn.Size = new System.Drawing.Size(95, 36);
             this.EditBtn.TabIndex = 1;
             this.EditBtn.Text = "Edit";
             this.EditBtn.UseVisualStyleBackColor = true;
@@ -62,6 +60,7 @@
             // 
             // LogBox
             // 
+            this.LogBox.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.LogBox.Location = new System.Drawing.Point(12, 293);
             this.LogBox.MaxLength = 50;
             this.LogBox.Multiline = true;
@@ -71,19 +70,12 @@
             this.LogBox.Size = new System.Drawing.Size(454, 154);
             this.LogBox.TabIndex = 7;
             // 
-            // FileSystemWatcher
-            // 
-            this.FileSystemWatcher.EnableRaisingEvents = true;
-            this.FileSystemWatcher.Path = "C:\\Users\\edric\\Desktop\\folder1";
-            this.FileSystemWatcher.SynchronizingObject = this;
-            this.FileSystemWatcher.Changed += new System.IO.FileSystemEventHandler(this.FileSystemWatcher_Changed);
-            // 
             // SyncBtn
             // 
             this.SyncBtn.Enabled = false;
-            this.SyncBtn.Location = new System.Drawing.Point(592, 420);
+            this.SyncBtn.Location = new System.Drawing.Point(592, 411);
             this.SyncBtn.Name = "SyncBtn";
-            this.SyncBtn.Size = new System.Drawing.Size(95, 27);
+            this.SyncBtn.Size = new System.Drawing.Size(95, 36);
             this.SyncBtn.TabIndex = 3;
             this.SyncBtn.Text = "Sync Now";
             this.SyncBtn.UseVisualStyleBackColor = true;
@@ -91,7 +83,7 @@
             // 
             // SyncList
             // 
-            this.SyncList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(250)))));
+            this.SyncList.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.SyncList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.SyncList.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SyncList.FormattingEnabled = true;
@@ -106,9 +98,9 @@
             // 
             // AddBtn
             // 
-            this.AddBtn.Location = new System.Drawing.Point(491, 293);
+            this.AddBtn.Location = new System.Drawing.Point(491, 284);
             this.AddBtn.Name = "AddBtn";
-            this.AddBtn.Size = new System.Drawing.Size(95, 27);
+            this.AddBtn.Size = new System.Drawing.Size(95, 36);
             this.AddBtn.TabIndex = 0;
             this.AddBtn.Text = "New";
             this.AddBtn.UseVisualStyleBackColor = true;
@@ -117,9 +109,9 @@
             // DeleteBtn
             // 
             this.DeleteBtn.Enabled = false;
-            this.DeleteBtn.Location = new System.Drawing.Point(693, 293);
+            this.DeleteBtn.Location = new System.Drawing.Point(693, 284);
             this.DeleteBtn.Name = "DeleteBtn";
-            this.DeleteBtn.Size = new System.Drawing.Size(95, 27);
+            this.DeleteBtn.Size = new System.Drawing.Size(95, 36);
             this.DeleteBtn.TabIndex = 2;
             this.DeleteBtn.Text = "Delete";
             this.DeleteBtn.UseVisualStyleBackColor = true;
@@ -138,9 +130,9 @@
             // 
             // SyncAllBtn
             // 
-            this.SyncAllBtn.Location = new System.Drawing.Point(693, 420);
+            this.SyncAllBtn.Location = new System.Drawing.Point(693, 411);
             this.SyncAllBtn.Name = "SyncAllBtn";
-            this.SyncAllBtn.Size = new System.Drawing.Size(95, 27);
+            this.SyncAllBtn.Size = new System.Drawing.Size(95, 36);
             this.SyncAllBtn.TabIndex = 4;
             this.SyncAllBtn.Text = "Sync All Now";
             this.SyncAllBtn.UseVisualStyleBackColor = true;
@@ -154,7 +146,7 @@
             // FreqTrackBar
             // 
             this.FreqTrackBar.LargeChange = 1;
-            this.FreqTrackBar.Location = new System.Drawing.Point(592, 369);
+            this.FreqTrackBar.Location = new System.Drawing.Point(592, 360);
             this.FreqTrackBar.Maximum = 5;
             this.FreqTrackBar.Name = "FreqTrackBar";
             this.FreqTrackBar.Size = new System.Drawing.Size(196, 45);
@@ -166,7 +158,7 @@
             // FreqLabel
             // 
             this.FreqLabel.AutoSize = true;
-            this.FreqLabel.Location = new System.Drawing.Point(564, 353);
+            this.FreqLabel.Location = new System.Drawing.Point(564, 344);
             this.FreqLabel.Name = "FreqLabel";
             this.FreqLabel.Size = new System.Drawing.Size(112, 13);
             this.FreqLabel.TabIndex = 14;
@@ -175,7 +167,7 @@
             // FreqValueDisplay
             // 
             this.FreqValueDisplay.AutoSize = true;
-            this.FreqValueDisplay.Location = new System.Drawing.Point(682, 353);
+            this.FreqValueDisplay.Location = new System.Drawing.Point(682, 344);
             this.FreqValueDisplay.Name = "FreqValueDisplay";
             this.FreqValueDisplay.Size = new System.Drawing.Size(73, 13);
             this.FreqValueDisplay.TabIndex = 15;
@@ -195,6 +187,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(800, 459);
             this.Controls.Add(this.LogLabel);
             this.Controls.Add(this.FreqValueDisplay);
@@ -209,11 +202,11 @@
             this.Controls.Add(this.EditBtn);
             this.Controls.Add(this.ArrowPic);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "MoveCuteForm";
             this.Text = "MoveCute";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MoveCuteForm_FormClosing);
             this.Load += new System.EventHandler(this.MoveCuteForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.FileSystemWatcher)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ArrowPic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FreqTrackBar)).EndInit();
             this.ResumeLayout(false);
@@ -225,7 +218,6 @@
 
         private System.Windows.Forms.Button EditBtn;
         private System.Windows.Forms.TextBox LogBox;
-        private System.IO.FileSystemWatcher FileSystemWatcher;
         private System.Windows.Forms.Button SyncBtn;
         private System.Windows.Forms.ListBox SyncList;
         private System.Windows.Forms.Button AddBtn;

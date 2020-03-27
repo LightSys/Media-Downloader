@@ -22,7 +22,7 @@ namespace MoveCute
             30 * 60 * 1000,
             2 * 60 * 60 * 1000,
             8 * 60 * 60 * 1000,
-            4000, //24 * 60 * 60 * 1000,
+            24 * 60 * 60 * 1000,
             -1
         };
 
@@ -74,11 +74,6 @@ namespace MoveCute
             LogBox.ScrollToCaret();
         }
 
-        private void FileSystemWatcher_Changed(object sender, System.IO.FileSystemEventArgs e)
-        {
-            // TODO: trigger sync on change??
-        }
-
         private void SyncList_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool selectionExists = SyncList.SelectedIndex > -1;
@@ -89,7 +84,6 @@ namespace MoveCute
 
         private void DrawSyncListBoxItem(object sender, DrawItemEventArgs e)
         {
-            //TODO: ellipsize
             ListBox list = (ListBox)sender;
 
             if (e.Index < 0) return;
@@ -99,17 +93,48 @@ namespace MoveCute
             e.DrawFocusRectangle();
 
             Brush brush = new SolidBrush(e.ForeColor);
-            SizeF destSize = e.Graphics.MeasureString(fs.DestPath, e.Font);
-            int y = e.Bounds.Top + e.Bounds.Height / 2 - (int)destSize.Height / 2;
+            int textHeight = e.Font.Height;
             
-            e.Graphics.DrawString(fs.SrcMacro, e.Font, brush, 0, y);
-            e.Graphics.DrawString(fs.DestPath, e.Font, brush, e.Bounds.Right - destSize.Width, y);
+            StringFormat format = new StringFormat();
+            format.LineAlignment = StringAlignment.Center;
+            format.FormatFlags = StringFormatFlags.NoWrap;
+
+            Rectangle rect = new Rectangle();
+            rect.Y = e.Bounds.Top;
+            rect.Width = e.Bounds.Width/2 - textHeight/2;
+            rect.Height = e.Bounds.Height;
+
+            // Left string
+            format.Alignment = StringAlignment.Near;
+            rect.X = e.Bounds.Left;
+            string display = EllipsizeFront(fs.SrcMacro, rect.Width, e);
+            e.Graphics.DrawString(display, e.Font, brush, rect, format);
+
+            // Right string
+            format.Alignment = StringAlignment.Far;
+            rect.X = e.Bounds.Left + e.Bounds.Width/2 + textHeight/2;
+            display = EllipsizeFront(fs.DestPath, rect.Width, e);
+            e.Graphics.DrawString(display, e.Font, brush, rect, format);
 
             //arrow
-            int cx = e.Bounds.Left + (e.Bounds.Width / 2);
-            int width = (int)destSize.Height;
-            Rectangle rect = new Rectangle(cx - width/2, y, width, width);
+            int cx = e.Bounds.Left + (e.Bounds.Width/2);
+            int cy = e.Bounds.Top + (e.Bounds.Height/2);
+            int width = textHeight;
+            rect = new Rectangle(cx - width/2, cy - textHeight/2, width, textHeight);
             e.Graphics.DrawImage(ArrowPic.Image, rect); //TODO: better way of getting image?
+        }
+
+        private string EllipsizeFront(string s, int width, DrawItemEventArgs e)
+        {
+            if (e.Graphics.MeasureString(s, e.Font).Width <= width) return s;
+
+            s = "..." + s;
+            while (e.Graphics.MeasureString(s, e.Font).Width > width)
+            {
+                s = "..." + s.Substring(4);
+            }
+
+            return s;
         }
 
         private void AddBtn_Clicked(object sender, EventArgs e)
