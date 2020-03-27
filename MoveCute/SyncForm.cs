@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -53,6 +54,7 @@ namespace MoveCute
         {
             FileSync.SrcMacro = SrcBox.Text;
             FileSync.DestPath = DestBox.Text;
+            FileSync.OffsetHours = (int)OffsetBox.Value;
             Close();
         }
         private void CancelBtn_Click(object sender, EventArgs e)
@@ -63,12 +65,11 @@ namespace MoveCute
         {
             UpdateSaveBtnEnabled();
             if (string.IsNullOrWhiteSpace(SrcBox.Text)) return;
-            
-            string filePath = "";
 
+            string filePath;
             try
             {
-                filePath = FileSync.EvaluateMacro(SrcBox.Text);
+                filePath = FileSync.EvaluateMacro(SrcBox.Text, (int)OffsetBox.Value);
             }
             catch (Exception ex)
             {
@@ -98,6 +99,11 @@ namespace MoveCute
         {
             MacroHelpForm helpForm = new MacroHelpForm();
             helpForm.Show(this);
+        }
+
+        private void OffsetBox_ValueChanged(object sender, EventArgs e)
+        {
+            SrcBox_TextChanged(sender, e);
         }
     }
 }

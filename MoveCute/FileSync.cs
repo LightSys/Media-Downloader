@@ -32,7 +32,8 @@ namespace MoveCute
 
         public string DestPath { get; set; }
         public string SrcMacro { get; set; }
-        public string SrcPath { get { return EvaluateMacro(SrcMacro); } }
+        public string SrcPath { get { return EvaluateMacro(SrcMacro, OffsetHours); } }
+        public int OffsetHours { get; set; }
 
         public static readonly DateTime InvalidDateTime = DateTime.MinValue;
         
@@ -49,7 +50,7 @@ namespace MoveCute
         /// <returns>
         ///     A file path or the empty string
         /// </returns>
-        public static string EvaluateMacro(string macro)
+        public static string EvaluateMacro(string macro, int offsetHours)
         {
             string[] potentialMatches = FindPotentialFileMatches(macro);
             if (potentialMatches == null || potentialMatches.Length == 0)
@@ -75,8 +76,9 @@ namespace MoveCute
                                                    // not handled here: only literals in dateFormat
                 
                 DateTime fileDate = CalculateFileDate(pathMatcher, path, dateFormat);
-
                 if (fileDate == InvalidDateTime) continue;
+
+                fileDate = fileDate.AddHours(offsetHours);
 
                 TimeSpan diff = now - fileDate;
 

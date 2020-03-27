@@ -42,11 +42,15 @@
             this.MatchLbl = new System.Windows.Forms.Label();
             this.WarnLbl = new System.Windows.Forms.Label();
             this.HelpBtn = new System.Windows.Forms.Button();
+            this.HourOffsetLabel = new System.Windows.Forms.Label();
+            this.OffsetBox = new System.Windows.Forms.NumericUpDown();
+            this.OffsetHelpLabel = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.OffsetBox)).BeginInit();
             this.SuspendLayout();
             // 
             // SrcBox
             // 
-            this.SrcBox.Location = new System.Drawing.Point(15, 36);
+            this.SrcBox.Location = new System.Drawing.Point(12, 35);
             this.SrcBox.Name = "SrcBox";
             this.SrcBox.Size = new System.Drawing.Size(340, 20);
             this.SrcBox.TabIndex = 0;
@@ -54,7 +58,7 @@
             // 
             // DestBox
             // 
-            this.DestBox.Location = new System.Drawing.Point(15, 177);
+            this.DestBox.Location = new System.Drawing.Point(12, 177);
             this.DestBox.Name = "DestBox";
             this.DestBox.Size = new System.Drawing.Size(340, 20);
             this.DestBox.TabIndex = 1;
@@ -96,8 +100,9 @@
             // 
             // SaveBtn
             // 
+            this.SaveBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.SaveBtn.Enabled = false;
-            this.SaveBtn.Location = new System.Drawing.Point(361, 249);
+            this.SaveBtn.Location = new System.Drawing.Point(361, 275);
             this.SaveBtn.Name = "SaveBtn";
             this.SaveBtn.Size = new System.Drawing.Size(75, 23);
             this.SaveBtn.TabIndex = 5;
@@ -107,7 +112,8 @@
             // 
             // CancelBtn
             // 
-            this.CancelBtn.Location = new System.Drawing.Point(280, 249);
+            this.CancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CancelBtn.Location = new System.Drawing.Point(280, 275);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(75, 23);
             this.CancelBtn.TabIndex = 6;
@@ -117,7 +123,7 @@
             // 
             // SampleBox
             // 
-            this.SampleBox.Location = new System.Drawing.Point(15, 90);
+            this.SampleBox.Location = new System.Drawing.Point(12, 90);
             this.SampleBox.Multiline = true;
             this.SampleBox.Name = "SampleBox";
             this.SampleBox.ReadOnly = true;
@@ -128,7 +134,7 @@
             // SrcLbl
             // 
             this.SrcLbl.AutoSize = true;
-            this.SrcLbl.Location = new System.Drawing.Point(12, 20);
+            this.SrcLbl.Location = new System.Drawing.Point(9, 19);
             this.SrcLbl.Name = "SrcLbl";
             this.SrcLbl.Size = new System.Drawing.Size(111, 13);
             this.SrcLbl.TabIndex = 8;
@@ -137,7 +143,7 @@
             // DestLbl
             // 
             this.DestLbl.AutoSize = true;
-            this.DestLbl.Location = new System.Drawing.Point(12, 161);
+            this.DestLbl.Location = new System.Drawing.Point(9, 161);
             this.DestLbl.Name = "DestLbl";
             this.DestLbl.Size = new System.Drawing.Size(79, 13);
             this.DestLbl.TabIndex = 9;
@@ -146,7 +152,7 @@
             // MatchLbl
             // 
             this.MatchLbl.AutoSize = true;
-            this.MatchLbl.Location = new System.Drawing.Point(15, 71);
+            this.MatchLbl.Location = new System.Drawing.Point(9, 74);
             this.MatchLbl.Name = "MatchLbl";
             this.MatchLbl.Size = new System.Drawing.Size(56, 13);
             this.MatchLbl.TabIndex = 10;
@@ -154,16 +160,16 @@
             // 
             // WarnLbl
             // 
-            this.WarnLbl.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.WarnLbl.Location = new System.Drawing.Point(80, 227);
+            this.WarnLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.WarnLbl.Location = new System.Drawing.Point(18, 253);
             this.WarnLbl.Name = "WarnLbl";
-            this.WarnLbl.Size = new System.Drawing.Size(356, 19);
+            this.WarnLbl.Size = new System.Drawing.Size(418, 19);
             this.WarnLbl.TabIndex = 11;
             this.WarnLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // HelpBtn
             // 
-            this.HelpBtn.Location = new System.Drawing.Point(15, 119);
+            this.HelpBtn.Location = new System.Drawing.Point(12, 119);
             this.HelpBtn.Name = "HelpBtn";
             this.HelpBtn.Size = new System.Drawing.Size(75, 23);
             this.HelpBtn.TabIndex = 12;
@@ -171,11 +177,50 @@
             this.HelpBtn.UseVisualStyleBackColor = true;
             this.HelpBtn.Click += new System.EventHandler(this.HelpBtn_Click);
             // 
+            // HourOffsetLabel
+            // 
+            this.HourOffsetLabel.AutoSize = true;
+            this.HourOffsetLabel.Location = new System.Drawing.Point(12, 209);
+            this.HourOffsetLabel.Name = "HourOffsetLabel";
+            this.HourOffsetLabel.Size = new System.Drawing.Size(66, 13);
+            this.HourOffsetLabel.TabIndex = 14;
+            this.HourOffsetLabel.Text = "Hours Offset";
+            // 
+            // OffsetBox
+            // 
+            this.OffsetBox.Location = new System.Drawing.Point(12, 225);
+            this.OffsetBox.Maximum = new decimal(new int[] {
+            72,
+            0,
+            0,
+            0});
+            this.OffsetBox.Minimum = new decimal(new int[] {
+            72,
+            0,
+            0,
+            -2147483648});
+            this.OffsetBox.Name = "OffsetBox";
+            this.OffsetBox.Size = new System.Drawing.Size(120, 20);
+            this.OffsetBox.TabIndex = 15;
+            this.OffsetBox.ValueChanged += new System.EventHandler(this.OffsetBox_ValueChanged);
+            // 
+            // OffsetHelpLabel
+            // 
+            this.OffsetHelpLabel.AutoSize = true;
+            this.OffsetHelpLabel.Location = new System.Drawing.Point(138, 227);
+            this.OffsetHelpLabel.Name = "OffsetHelpLabel";
+            this.OffsetHelpLabel.Size = new System.Drawing.Size(219, 13);
+            this.OffsetHelpLabel.TabIndex = 16;
+            this.OffsetHelpLabel.Text = "A Negative offset makes dates match sooner";
+            // 
             // SyncForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 284);
+            this.ClientSize = new System.Drawing.Size(448, 310);
+            this.Controls.Add(this.OffsetHelpLabel);
+            this.Controls.Add(this.OffsetBox);
+            this.Controls.Add(this.HourOffsetLabel);
             this.Controls.Add(this.HelpBtn);
             this.Controls.Add(this.WarnLbl);
             this.Controls.Add(this.MatchLbl);
@@ -193,6 +238,7 @@
             this.MaximizeBox = false;
             this.Name = "SyncForm";
             this.Text = "New File Sync";
+            ((System.ComponentModel.ISupportInitialize)(this.OffsetBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,5 +260,8 @@
         private System.Windows.Forms.Label MatchLbl;
         private System.Windows.Forms.Label WarnLbl;
         private System.Windows.Forms.Button HelpBtn;
+        private System.Windows.Forms.Label HourOffsetLabel;
+        private System.Windows.Forms.NumericUpDown OffsetBox;
+        private System.Windows.Forms.Label OffsetHelpLabel;
     }
 }
