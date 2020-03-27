@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace MoveCute
@@ -63,16 +63,27 @@ namespace MoveCute
         {
             UpdateSaveBtnEnabled();
             if (string.IsNullOrWhiteSpace(SrcBox.Text)) return;
-            SampleBox.Clear();
+            
+            string filePath = "";
+
             try
             {
-                SampleBox.Text = FileSync.EvaluateMacro(SrcBox.Text);
+                filePath = FileSync.EvaluateMacro(SrcBox.Text);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                SampleBox.Text = "";
+                WarnLbl.Text = ex.Message;
+                return;
             }
+
+            if (filePath == "") WarnLbl.Text = "Macro doesn't match anything.";
+            else if (filePath == SrcBox.Text) WarnLbl.Text = "A single file is selected.";
+            else WarnLbl.Text = "";
+
+            SampleBox.Text = filePath;
         }
+
         private void DestBox_TextChanged(object sender, EventArgs e)
         {
             UpdateSaveBtnEnabled();
@@ -81,6 +92,12 @@ namespace MoveCute
         private void UpdateSaveBtnEnabled()
         {
             SaveBtn.Enabled = !string.IsNullOrWhiteSpace(SrcBox.Text) && !string.IsNullOrWhiteSpace(DestBox.Text);
+        }
+
+        private void HelpBtn_Click(object sender, EventArgs e)
+        {
+            MacroHelpForm helpForm = new MacroHelpForm();
+            helpForm.Show(this);
         }
     }
 }

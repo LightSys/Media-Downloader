@@ -34,45 +34,49 @@
             this.DestFileDlg = new System.Windows.Forms.OpenFileDialog();
             this.SrcBtn = new System.Windows.Forms.Button();
             this.DestBtn = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.SaveBtn = new System.Windows.Forms.Button();
             this.CancelBtn = new System.Windows.Forms.Button();
             this.SampleBox = new System.Windows.Forms.TextBox();
             this.SrcLbl = new System.Windows.Forms.Label();
             this.DestLbl = new System.Windows.Forms.Label();
             this.MatchLbl = new System.Windows.Forms.Label();
-            this.warnLbl = new System.Windows.Forms.Label();
+            this.WarnLbl = new System.Windows.Forms.Label();
+            this.HelpBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // SrcBox
             // 
             this.SrcBox.Location = new System.Drawing.Point(15, 36);
             this.SrcBox.Name = "SrcBox";
-            this.SrcBox.Size = new System.Drawing.Size(324, 20);
+            this.SrcBox.Size = new System.Drawing.Size(340, 20);
             this.SrcBox.TabIndex = 0;
             this.SrcBox.TextChanged += new System.EventHandler(this.SrcBox_TextChanged);
             // 
             // DestBox
             // 
-            this.DestBox.Location = new System.Drawing.Point(15, 234);
+            this.DestBox.Location = new System.Drawing.Point(15, 177);
             this.DestBox.Name = "DestBox";
-            this.DestBox.Size = new System.Drawing.Size(324, 20);
+            this.DestBox.Size = new System.Drawing.Size(340, 20);
             this.DestBox.TabIndex = 1;
             this.DestBox.TextChanged += new System.EventHandler(this.DestBox_TextChanged);
             // 
             // SrcFileDlg
             // 
-            this.SrcFileDlg.FileName = "program.mp3";
+            this.SrcFileDlg.CheckFileExists = false;
+            this.SrcFileDlg.CheckPathExists = false;
+            this.SrcFileDlg.FileName = "file.mp3";
             this.SrcFileDlg.FileOk += new System.ComponentModel.CancelEventHandler(this.SrcFileDlg_FileOk);
             // 
             // DestFileDlg
             // 
-            this.DestFileDlg.FileName = "program.mp3";
+            this.DestFileDlg.CheckFileExists = false;
+            this.DestFileDlg.CheckPathExists = false;
+            this.DestFileDlg.FileName = "file.mp3";
             this.DestFileDlg.FileOk += new System.ComponentModel.CancelEventHandler(this.DestFileDlg_FileOk);
             // 
             // SrcBtn
             // 
-            this.SrcBtn.Location = new System.Drawing.Point(345, 33);
+            this.SrcBtn.Location = new System.Drawing.Point(361, 33);
             this.SrcBtn.Name = "SrcBtn";
             this.SrcBtn.Size = new System.Drawing.Size(75, 23);
             this.SrcBtn.TabIndex = 2;
@@ -82,7 +86,7 @@
             // 
             // DestBtn
             // 
-            this.DestBtn.Location = new System.Drawing.Point(345, 234);
+            this.DestBtn.Location = new System.Drawing.Point(361, 177);
             this.DestBtn.Name = "DestBtn";
             this.DestBtn.Size = new System.Drawing.Size(75, 23);
             this.DestBtn.TabIndex = 3;
@@ -90,20 +94,10 @@
             this.DestBtn.UseVisualStyleBackColor = true;
             this.DestBtn.Click += new System.EventHandler(this.DestBtn_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 116);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(167, 78);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "label1label1label1label1label1labe\r\nl1label1label1label1la\r\nbel1label1label1label" +
-    "\r\n1label1label1label1la\r\nbel1label1label1label\r\n1label1label1label1label1";
-            // 
             // SaveBtn
             // 
             this.SaveBtn.Enabled = false;
-            this.SaveBtn.Location = new System.Drawing.Point(361, 343);
+            this.SaveBtn.Location = new System.Drawing.Point(361, 249);
             this.SaveBtn.Name = "SaveBtn";
             this.SaveBtn.Size = new System.Drawing.Size(75, 23);
             this.SaveBtn.TabIndex = 5;
@@ -113,7 +107,7 @@
             // 
             // CancelBtn
             // 
-            this.CancelBtn.Location = new System.Drawing.Point(280, 343);
+            this.CancelBtn.Location = new System.Drawing.Point(280, 249);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(75, 23);
             this.CancelBtn.TabIndex = 6;
@@ -127,7 +121,7 @@
             this.SampleBox.Multiline = true;
             this.SampleBox.Name = "SampleBox";
             this.SampleBox.ReadOnly = true;
-            this.SampleBox.Size = new System.Drawing.Size(324, 23);
+            this.SampleBox.Size = new System.Drawing.Size(340, 23);
             this.SampleBox.TabIndex = 7;
             this.SampleBox.WordWrap = false;
             // 
@@ -143,7 +137,7 @@
             // DestLbl
             // 
             this.DestLbl.AutoSize = true;
-            this.DestLbl.Location = new System.Drawing.Point(12, 218);
+            this.DestLbl.Location = new System.Drawing.Point(12, 161);
             this.DestLbl.Name = "DestLbl";
             this.DestLbl.Size = new System.Drawing.Size(79, 13);
             this.DestLbl.TabIndex = 9;
@@ -158,32 +152,44 @@
             this.MatchLbl.TabIndex = 10;
             this.MatchLbl.Text = "File Match";
             // 
-            // warnLbl
+            // WarnLbl
             // 
-            this.warnLbl.AutoSize = true;
-            this.warnLbl.Location = new System.Drawing.Point(12, 314);
-            this.warnLbl.Name = "warnLbl";
-            this.warnLbl.Size = new System.Drawing.Size(90, 13);
-            this.warnLbl.TabIndex = 11;
-            this.warnLbl.Text = "Warning Warning";
+            this.WarnLbl.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.WarnLbl.Location = new System.Drawing.Point(80, 227);
+            this.WarnLbl.Name = "WarnLbl";
+            this.WarnLbl.Size = new System.Drawing.Size(356, 19);
+            this.WarnLbl.TabIndex = 11;
+            this.WarnLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // HelpBtn
+            // 
+            this.HelpBtn.Location = new System.Drawing.Point(15, 119);
+            this.HelpBtn.Name = "HelpBtn";
+            this.HelpBtn.Size = new System.Drawing.Size(75, 23);
+            this.HelpBtn.TabIndex = 12;
+            this.HelpBtn.Text = "Macro Help";
+            this.HelpBtn.UseVisualStyleBackColor = true;
+            this.HelpBtn.Click += new System.EventHandler(this.HelpBtn_Click);
             // 
             // SyncForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 378);
-            this.Controls.Add(this.warnLbl);
+            this.ClientSize = new System.Drawing.Size(448, 284);
+            this.Controls.Add(this.HelpBtn);
+            this.Controls.Add(this.WarnLbl);
             this.Controls.Add(this.MatchLbl);
             this.Controls.Add(this.DestLbl);
             this.Controls.Add(this.SrcLbl);
             this.Controls.Add(this.SampleBox);
             this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.SaveBtn);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.DestBtn);
             this.Controls.Add(this.SrcBtn);
             this.Controls.Add(this.DestBox);
             this.Controls.Add(this.SrcBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.HelpButton = true;
             this.Name = "SyncForm";
             this.Text = "New File Sync";
             this.ResumeLayout(false);
@@ -199,13 +205,13 @@
         private System.Windows.Forms.OpenFileDialog DestFileDlg;
         private System.Windows.Forms.Button SrcBtn;
         private System.Windows.Forms.Button DestBtn;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button SaveBtn;
         private System.Windows.Forms.Button CancelBtn;
         private System.Windows.Forms.TextBox SampleBox;
         private System.Windows.Forms.Label SrcLbl;
         private System.Windows.Forms.Label DestLbl;
         private System.Windows.Forms.Label MatchLbl;
-        private System.Windows.Forms.Label warnLbl;
+        private System.Windows.Forms.Label WarnLbl;
+        private System.Windows.Forms.Button HelpBtn;
     }
 }

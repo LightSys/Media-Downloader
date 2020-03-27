@@ -117,67 +117,54 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="FileSystemWatcher.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>172, 17</value>
-  </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="ArrowPic.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="textBox2.Text" xml:space="preserve">
     <value>
-        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
-        4MDlnkRgbwAAAABJRU5ErkJggg==
-</value>
+The Source Macro text box accepts wildcards and date macros.
+
+A wildcard is a * which takes the place of words like a track title.
+For example, entering "C:\Music\*.mp3" will find:
+  C:\Music\song.mp3
+  C:\Music\song two.mp3
+  C:\Music\song3.mp3
+but it won't find:
+  C:\Music\album\song.mp3
+  C:\Music\note.txt
+
+A date macro is a group of characters that specify a date
+
+A date macro is a group of letters inside of {}.
+For example, if you have the files:
+  C:\Music\2020-01-30 recording.mp3
+  C:\Music\2020-01-31 recording.mp3
+  C:\Music\2020-01-31 notes.txt
+
+Entering "C:\Music\{yyyy-MM-dd} recording.mp3" will cause
+MoveCute to select one of the two mp3 files based on the current date.
+MoveCute will select the file with a date closest to now, which is not in the future.
+If today is January 31st it will select "C:\Music\2020-01-31 recording.mp3".
+The txt file will never be selected with this macro.
+
+You can combine wildcards with date macros.
+date macros can contain these letter combinations:
+
+         desc.       range      ex.
+ ===================================
+ yyyy    year      0000-9999   2004
+ yy      year        00-99       04
+ y       year         0-99        4
+ MM      month       00-12       03
+ M       month        1-12        3
+ dd      day         00-31       07
+ d       day          0-31        7
+ hh      hour        01-12       02
+ h       hour         1-12        2
+ HH      hour        00-23       02
+ H       hour         0-23        2
+ mm      minute      00-59       06
+ m       minute       0-59        6
+ ss      second      00-59       08
+ s       second       0-59        8
+ tt      AM/PM       AM,PM       AM
+ t       A/P          A,P         A</value>
   </data>
-  <metadata name="SyncTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>327, 17</value>
-  </metadata>
 </root>
