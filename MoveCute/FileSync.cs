@@ -8,7 +8,7 @@ namespace MoveCute
 {
     public class FileSync
     {
-        private static Dictionary<string, string> DateUnitToRegex = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> DateUnitToRegex = new Dictionary<string, string>
         {
             // TODO: these currently accept any numbers and could be changed to only include valid numbers
             {"yyyy", @"\d{4}"},
@@ -33,6 +33,8 @@ namespace MoveCute
         public string DestPath { get; set; }
         public string SrcMacro { get; set; }
         public string SrcPath { get { return EvaluateMacro(SrcMacro); } }
+
+        public static readonly DateTime InvalidDateTime = DateTime.MinValue;
         
         override public string ToString()
         {
@@ -53,33 +55,56 @@ namespace MoveCute
             if (potentialMatches == null || potentialMatches.Length == 0)
             {
                 return "";
-            } 
+            }
+            
+            Console.WriteLine("\r\n\r\n\r\n");
+            Console.WriteLine("potentials:");
+            foreach (string path in potentialMatches) Console.WriteLine(path);
 
-            Regex pathMatcher = GenerateFilterRegex(macro, out string dateFormat);
+            string dateFormat = "";
+            Regex pathMatcher = GenerateFilterRegex(macro, ref dateFormat);
             
             string output = "";
             TimeSpan shortestSpan = new TimeSpan(long.MaxValue);
             DateTime now = DateTime.Now;
 
             //TODO: Add other selection criteria (currently only closest to current date and not future)
+            //TODO: maybe expose some var which says whether or not a valid future match was found
 
-            string dateUnits = ExtractDateUnits(macro);
-
+            Console.WriteLine("df: " + dateFormat);
+            Console.WriteLine("files: ");
             foreach (string path in potentialMatches)
             {
-                if (!pathMatcher.IsMatch(path)) continue;
+                Console.Write(path);
+
+                if (!pathMatcher.IsMatch(path))
+                {
+                    Console.WriteLine("");
+                    continue;
+                }
+
+                Console.Write("<---matches");
+
+                if (dateFormat == "")
+                {
+                    Console.WriteLine("");
+                    return path; // no format string provided, return first match
+                }
                 
-                if (dateUnits == "") return path; // no format string provided, return first match
-                
-                DateTime fileDate = CalculateFileDate(pathMatcher, path, dateUnits);
+                DateTime fileDate = CalculateFileDate(pathMatcher, path, dateFormat);
+
+                if (fileDate == InvalidDateTime) continue;
+
                 TimeSpan diff = now - fileDate;
 
+                Console.Write(diff.TotalMinutes);
                 if (fileDate < now && diff < shortestSpan)
                 {
                     shortestSpan = diff;
                     output = path;
                 }
-
+                
+                Console.WriteLine("");
             }
 
             if (output == "") return "";
@@ -88,8 +113,7 @@ namespace MoveCute
         }
 
 
-
-        private static string[] FindPotentialFileMatches(string macro)
+        public static string[] FindPotentialFileMatches(string macro)
         {
             if (string.IsNullOrWhiteSpace(macro)) return default;
             string basePath = "";
@@ -122,7 +146,7 @@ namespace MoveCute
             return default;
         }
 
-        private static Regex GenerateFilterRegex(string macro, out string dateFormatStr)
+        public static Regex GenerateFilterRegex(string macro, ref string dateFormatStr)
         {
             string regexStr = "";
             int i = 0;
@@ -132,12 +156,14 @@ namespace MoveCute
                 if (ch == '{')
                 {
                     string dateToken = "";
-                    while (ch != '}') //TODO: doesn't this need a length check?
+                    ch = macro[i++]; // skip over '{'
+                    while (ch != '}') 
                     {
-                        ch = macro[i++];
                         dateToken += ch;
+                        ch = macro[i++];
+                        if (i == macro.Length) throw new ArgumentException(@"Mismatched ""{"". If the filename has ""{"", try ""{{}"".");
                     }
-                    regexStr += GetTokenRegexStr(dateToken);
+                    regexStr += GetTokenRegexStr(dateToken, ref dateFormatStr);
                 }
                 else if (ch == '*')
                 {
@@ -149,86 +175,69 @@ namespace MoveCute
                 }
             }
             
-            dateFormatStr = ""; //TODO: deleteme
-
             regexStr = "^" + regexStr + "$";
             return new Regex(regexStr);
         }
 
-        private static string GetTokenRegexStr(string dateToken)
+        public static string GetTokenRegexStr(string dateToken, ref string dateFormatStr)
         {
-            //dateToken examples: "YYYY", "MMDD", "YY-MM-DD"
+            Regex repeatMatcher = new Regex(@"(.)\1*");
+            MatchCollection matches = repeatMatcher.Matches(dateToken);
+
             string tokenRegexStr = "";
-            char currentAtom = '\0';
-            string currentDateUnit;
-            int i = 0;
-            while (i < dateToken.Length)
+            foreach (Match match in matches)
             {
-                char ch = dateToken[i++];
-                if (ch != currentAtom)
-                {
-                    currentAtom = ch;
-                    currentDateUnit = "";
-                    while (ch == currentAtom && i < dateToken.Length)
-                    {
-                        currentDateUnit += ch;
-                        ch = dateToken[i++];
-                    }
-                    //TODO: wrap currentDateUnit in parens to atomize further - needed for duplicate removal
-                    tokenRegexStr += GetRegexFromDateUnit(currentDateUnit);
-                    i--;
-                }
+                string repeat = match.Value;
+                tokenRegexStr += "(" + GetRegexFromDateUnit(repeat, ref dateFormatStr) + ")";
             }
 
-            return "(" + tokenRegexStr + ")";
+            return tokenRegexStr;
         }
 
-        private static string GetRegexFromDateUnit(string dateUnit)
+        public static string GetRegexFromDateUnit(string dateUnit, ref string dateFormatStr)
         {
             if (DateUnitToRegex.ContainsKey(dateUnit))
             {
+                dateFormatStr += dateUnit + "&";
                 return DateUnitToRegex[dateUnit];
             }
 
             // no defined dateUnit found
+            dateFormatStr += "'" + dateUnit + "'&";
+
             return Regex.Escape(dateUnit);
         }
 
-        private static DateTime CalculateFileDate(Regex pathMatcher, string filePath, string dateUnits)
+        public static DateTime CalculateFileDate(Regex pathMatcher, string filePath, string dateUnits)
         {
+            if (string.IsNullOrEmpty(dateUnits)) throw new ArgumentException("empty dateUnits.");
+            if (string.IsNullOrEmpty(filePath)) throw new ArgumentException("empty filepath.");
+
             string pathDateString = ExtractDateString(pathMatcher, filePath);
-            // TODO: remove corresponding duplicate date unit - maybe do inside of ExtractDateString?
-            return DateTime.ParseExact(pathDateString, dateUnits, new CultureInfo("en-US"));
-        }
 
-        /// <summary>
-        /// Extracts the date units from the macro by concatenating braced strings.
-        /// </summary>
-        /// <param name="macro"></param>
-        /// <returns></returns>
-        private static string ExtractDateUnits(string macro)
-        {
-            //TODO: Probably construct this inside of GetTokenRegexStr instead of here.
-            // also should make non-defined date units into ParseExact literals.
-
-            Regex braceContain = new Regex(@"\{(.+?)\}");
-            MatchCollection matches = braceContain.Matches(macro);
-            string dateUnits = "";
-            foreach (Match match in matches)
+            if (string.IsNullOrEmpty(pathDateString)) throw new ArgumentException("empty pathDateString. Not sure how.");
+            
+            try
             {
-                dateUnits += match.Groups[1].Captures[0].Value + "-";
+                return DateTime.ParseExact(pathDateString, dateUnits, new CultureInfo("en-US"));
             }
+            catch (FormatException)
+            {
+                // the regex captured an invalid value
+                // invalid examples: 13-32 for {MM-dd}, 0 for {M}, 11-12 for {MM-MM}
+                // some valid examples to note: 12-12 for {MM-MM}, 1-1 for {h-H}, 3-03 for {m-mm}
 
-            return dateUnits;
+                return InvalidDateTime;
+            }
         }
 
         /// <summary>
-        /// Extracts a date string from a file path, given the regex that identifies the date units.
+        /// Captures a date string from a file path, given the regex that identifies the date units.
         /// </summary>
         /// <param name="pathMatcher">Regular expression to capture the date units.</param>
         /// <param name="filePath">A file path that should fully match pathMatcher</param>
         /// <returns></returns>
-        private static string ExtractDateString(Regex pathMatcher, string filePath)
+        public static string ExtractDateString(Regex pathMatcher, string filePath)
         {
             if (!pathMatcher.IsMatch(filePath))
             {
@@ -241,7 +250,9 @@ namespace MoveCute
             for (int i = 1; i < groups.Count; i++) //skip index 0, which contains full match
             {
                 Group group = groups[i];
-                pathDateString += group.Value + "-";
+                var unit = group.Value;
+
+                pathDateString += group.Value + "&";
             }
             return pathDateString;
         }

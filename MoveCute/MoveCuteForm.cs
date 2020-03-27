@@ -37,6 +37,7 @@ namespace MoveCute
         };
 
         private const int LOG_MAX_LENGTH = 3000;
+        private const string TIME_FORMAT = "MMM d, HH:mm";
 
         public MoveCuteForm()
         {
@@ -58,7 +59,8 @@ namespace MoveCute
             // TODO: avoid scrolling if LogBox has focus
             foreach (string text in texts)
             {
-                LogBox.Text += text + "\r\n";
+                string timestamp = "[" + DateTime.Now.ToString(TIME_FORMAT) + "] ";
+                LogBox.Text += timestamp + text + "\r\n";
             }
 
             string t = LogBox.Text;
@@ -87,6 +89,7 @@ namespace MoveCute
 
         private void DrawSyncListBoxItem(object sender, DrawItemEventArgs e)
         {
+            //TODO: ellipsize
             ListBox list = (ListBox)sender;
 
             if (e.Index < 0) return;
@@ -157,7 +160,7 @@ namespace MoveCute
             EditBtn_Click(sender, e);
         }
 
-        public void CopyFile(FileSync fs)
+        public void CopyFile(FileSync fs, bool surpressLogs = false)
         {
             try
             {
@@ -168,49 +171,23 @@ namespace MoveCute
 
                 if (File.Exists(destPath))
                 {
-                    if (FilesAreEqual(srcPath, destPath)) return;
+                    if (FilesAreEqual(srcPath, destPath))
+                    {
+                        LogLine($"{destPath} already up to date.");
+                        return;
+                    }
                     else File.Delete(destPath);
                 }
 
                 File.Copy(srcPath, destPath);
-                LogLine($"{srcPath} was copied to {destPath}.");
+                LogLine($"{srcPath} was copied to {destPath}");
+                return;
             }
             catch (Exception ex)
             {
                 LogLine($"Failed to copy to {fs.DestPath}:" + ex.Message);
+                return;
             }
-        }
-
-        // https://stackoverflow.com/questions/1358510
-        static bool FilesAreEqual(string srcPath, string destPath)
-        {
-            const int BYTES_TO_READ = sizeof(long);
-
-            FileInfo first = new FileInfo(srcPath);
-            FileInfo second = new FileInfo(destPath);
-
-            if (first.Length != second.Length)
-                return false;
-
-            int iterations = (int)Math.Ceiling((double)first.Length / BYTES_TO_READ);
-
-            using (FileStream fs1 = first.OpenRead())
-            using (FileStream fs2 = second.OpenRead())
-            {
-                byte[] one = new byte[BYTES_TO_READ];
-                byte[] two = new byte[BYTES_TO_READ];
-
-                for (int i = 0; i < iterations; i++)
-                {
-                    fs1.Read(one, 0, BYTES_TO_READ);
-                    fs2.Read(two, 0, BYTES_TO_READ);
-
-                    if (BitConverter.ToInt64(one, 0) != BitConverter.ToInt64(two, 0))
-                        return false;
-                }
-            }
-
-            return true;
         }
 
         private void SyncBtn_Click(object sender, EventArgs e)
@@ -232,7 +209,7 @@ namespace MoveCute
                 CopyFile(fs);
             }
 
-            LogLine("Sync Finished at " + DateTime.Now.ToString("MMM/d hh:mm"));
+            LogLine("Sync Finished.");
         }
 
         private void SyncTimer_Tick(object sender, EventArgs e)
@@ -242,11 +219,13 @@ namespace MoveCute
             int duration = SyncDurations[FreqTrackBar.Value];
             if (duration < 0) return;
             DateTime nextScheduled = DateTime.Now.AddMilliseconds(duration);
-            LogLine("Next Scheduled Sync: " + nextScheduled.ToString("MMM/d hh:mm")); //TODO: make const format string;
+            LogLine("Next Scheduled Sync: " + nextScheduled.ToString(TIME_FORMAT));
         }
 
         private void FreqTrackBar_Scroll(object sender, EventArgs e)
         {
+            //TODO: maybe store value on close
+
             int idx = FreqTrackBar.Value;
             int duration = SyncDurations[idx];
             string title = SyncDurationTitles[idx];
@@ -282,6 +261,37 @@ namespace MoveCute
             {
                 SyncList.Items.Add(fs);
             }
+        }
+
+        // https://stackoverflow.com/questions/1358510
+        static bool FilesAreEqual(string srcPath, string destPath)
+        {
+            const int BYTES_TO_READ = sizeof(long);
+
+            FileInfo first = new FileInfo(srcPath);
+            FileInfo second = new FileInfo(destPath);
+
+            if (first.Length != second.Length)
+                return false;
+
+            int iterations = (int)Math.Ceiling((double)first.Length / BYTES_TO_READ);
+
+            using (FileStream fs1 = first.OpenRead())
+            using (FileStream fs2 = second.OpenRead())
+            {
+                byte[] one = new byte[BYTES_TO_READ];
+                byte[] two = new byte[BYTES_TO_READ];
+
+                for (int i = 0; i < iterations; i++)
+                {
+                    fs1.Read(one, 0, BYTES_TO_READ);
+                    fs2.Read(two, 0, BYTES_TO_READ);
+
+                    if (BitConverter.ToInt64(one, 0) != BitConverter.ToInt64(two, 0))
+                        return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
