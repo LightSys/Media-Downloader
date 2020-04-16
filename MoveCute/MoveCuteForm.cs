@@ -36,6 +36,12 @@ namespace MoveCute
             "Auto Sync Off",
         };
 
+        public enum CopyResult{
+            Success,
+            UpToDate,
+            Fail
+        };
+
         private const int LOG_MAX_LENGTH = 3000;
         private const string TIME_FORMAT = "MMM d, HH:mm";
 
@@ -185,7 +191,13 @@ namespace MoveCute
             EditBtn_Click(sender, e);
         }
 
-        public void CopyFile(FileSync fs, bool surpressLogs = false)
+        public CopyResult CopyFile(FileSync fs)
+        {
+            return CopyFile(fs, out string unusedMessage);
+        }
+
+
+        public CopyResult CopyFile(FileSync fs, out string message)
         {
             try
             {
@@ -198,27 +210,30 @@ namespace MoveCute
                 {
                     if (FilesAreEqual(srcPath, destPath))
                     {
-                        LogLine($"{destPath} already up to date.");
-                        return;
+                        message = $"{destPath} already up to date.";
+                        return CopyResult.UpToDate;
                     }
                     else File.Delete(destPath);
                 }
 
                 File.Copy(srcPath, destPath);
-                LogLine($"{srcPath} was copied to {destPath}");
-                return;
+                message = $"{srcPath} was copied to {destPath}";
+                return CopyResult.Success;
             }
             catch (Exception ex)
             {
-                LogLine($"Failed to copy to {fs.DestPath}:" + ex.Message);
-                return;
+                message = $"Failed to copy to {fs.DestPath}:" + ex.Message;
+                return CopyResult.Fail;
             }
         }
 
         private void SyncBtn_Click(object sender, EventArgs e)
         {
             if (SyncList.SelectedItem == null) LogLine("Nothing selected to sync.");
-            CopyFile((FileSync)SyncList.SelectedItem);
+
+            FileSync fs = (FileSync)SyncList.SelectedItem;
+            CopyFile(fs, out string message);
+            LogLine(message);
         }
 
         private void SyncAllBtn_Click(object sender, EventArgs e)
@@ -228,13 +243,28 @@ namespace MoveCute
                 LogLine("Nothing to sync.");
                 return;
             }
-
+            int successes = 0;
+            int upToDates = 0;
+            int failures = 0;
             foreach (FileSync fs in SyncList.Items)
             {
-                CopyFile(fs);
+                CopyResult copyResult = CopyFile(fs);
+
+                switch (copyResult)
+                {
+                    case CopyResult.Success:
+                        successes++;
+                        break;
+                    case CopyResult.UpToDate:
+                        upToDates++;
+                        break;
+                    case CopyResult.Fail:
+                        failures++;
+                        break;
+                }
             }
 
-            LogLine("Sync Finished.");
+            LogLine($"Sync Finished: {successes} copied. {upToDates} up-to-date. {failures} failed.");
         }
 
         private void SyncTimer_Tick(object sender, EventArgs e)
