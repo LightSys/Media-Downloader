@@ -1,0 +1,8 @@
+MoveCute/.vs/
+MoveCute/obj/
+MoveCute/bin/Debug/
+MoveCute/bin/Release/*
+!/MoveCute/bin/Release/MoveCute.exe
+
+MoveCuteTests/obj/
+MoveCuteTests/bin/
