@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -44,6 +45,7 @@ namespace MoveCute
 
         private const int LOG_MAX_LENGTH = 3000;
         private const string TIME_FORMAT = "MMM d, HH:mm";
+        private const string XML_FILE_PATH = @"MoveCute_data/fs.xml";
 
         public MoveCuteForm()
         {
@@ -66,9 +68,11 @@ namespace MoveCute
             foreach (string text in texts)
             {
                 string timestamp = "[" + DateTime.Now.ToString(TIME_FORMAT) + "] ";
-                LogBox.Text += timestamp + text + "\r\n";
+                string messsage = timestamp + text + "\r\n";
+                LogBox.AppendText(messsage);
             }
 
+            // trim text
             string t = LogBox.Text;
             if (t.Length > LOG_MAX_LENGTH)
             {
@@ -76,8 +80,8 @@ namespace MoveCute
                 LogBox.Text = t.Substring(index + 1);
             }
 
-            LogBox.SelectionLength = LogBox.TextLength;
-            LogBox.ScrollToCaret();
+            //LogBox.SelectionLength = LogBox.TextLength;
+            //LogBox.ScrollToCaret();
         }
 
         private void SyncList_SelectedIndexChanged(object sender, EventArgs e)
@@ -155,7 +159,7 @@ namespace MoveCute
             
             SyncList.Items.Add(fs);
 
-            //StoreFSFile() // probably don't need this here.
+            StoreFSFile(); // maybe don't need this here.
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
@@ -168,7 +172,7 @@ namespace MoveCute
             SyncForm syncForm = new SyncForm((FileSync)SyncList.SelectedItem);
             syncForm.ShowDialog(); // blocking
 
-            //StoreFSFile() // probably don't need this here.
+            StoreFSFile(); // maybe don't need this here.
             SyncList.Refresh();
         }
 
@@ -190,12 +194,6 @@ namespace MoveCute
             if (SyncList.IndexFromPoint(e.Location) == ListBox.NoMatches) return;
             EditBtn_Click(sender, e);
         }
-
-        public CopyResult CopyFile(FileSync fs)
-        {
-            return CopyFile(fs, out string unusedMessage);
-        }
-
 
         public CopyResult CopyFile(FileSync fs, out string message)
         {
@@ -248,7 +246,7 @@ namespace MoveCute
             int failures = 0;
             foreach (FileSync fs in SyncList.Items)
             {
-                CopyResult copyResult = CopyFile(fs);
+                CopyResult copyResult = CopyFile(fs, out _);
 
                 switch (copyResult)
                 {
@@ -263,18 +261,33 @@ namespace MoveCute
                         break;
                 }
             }
+            //TODO: get message from CopyFile, save to log file
 
             LogLine($"Sync Finished: {successes} copied. {upToDates} up-to-date. {failures} failed.");
+        }
+
+        private string CalculateNextSyncTimeString()
+        {
+            int duration = SyncDurations[FreqTrackBar.Value];
+            if (duration < 0) return "";
+            DateTime nextScheduled = DateTime.Now.AddMilliseconds(duration);
+            return nextScheduled.ToString(TIME_FORMAT);
+        }
+
+        private void StartSyncTimer(int duration)
+        {
+            SyncTimer.Stop();
+            if (duration < 0) return;
+            SyncTimer.Interval = duration;
+            SyncTimer.Start();
         }
 
         private void SyncTimer_Tick(object sender, EventArgs e)
         {
             LogLine("Starting Auto Sync...");
             SyncAllBtn_Click(sender, e);
-            int duration = SyncDurations[FreqTrackBar.Value];
-            if (duration < 0) return;
-            DateTime nextScheduled = DateTime.Now.AddMilliseconds(duration);
-            LogLine("Next Scheduled Sync: " + nextScheduled.ToString(TIME_FORMAT));
+            StartSyncTimer(SyncDurations[FreqTrackBar.Value]);
+            NextSyncBox.Text = CalculateNextSyncTimeString();
         }
 
         private void FreqTrackBar_Scroll(object sender, EventArgs e)
@@ -286,11 +299,58 @@ namespace MoveCute
             string title = SyncDurationTitles[idx];
             FreqValueDisplay.Text = title;
 
-            SyncTimer.Stop();
-            if (duration == -1) return;
-    
-            SyncTimer.Interval = duration;
-            SyncTimer.Start();
+            StartSyncTimer(duration);
+            NextSyncBox.Text = CalculateNextSyncTimeString();
+        }
+
+        private void NextSyncBtn_Click(object sender, EventArgs e)
+        {
+            bool saving = !NextSyncBox.ReadOnly;
+            //switch state
+            NextSyncBtn.Text = saving ? "Edit" : "Save";
+            NextSyncBox.ReadOnly = saving;
+
+            if (saving)
+            {
+                try
+                {
+                    DateTime next = DateTime.ParseExact(NextSyncBox.Text, TIME_FORMAT, new CultureInfo("en-US"));
+                    TimeSpan duration = next - DateTime.Now;
+                    if (duration.TotalMilliseconds <= 1000) throw new ArgumentException();
+                    StartSyncTimer((int)duration.TotalMilliseconds);
+                    LogLine($"Sync scheduled for {duration.Hours} hours and {duration.Minutes} minutes from now.");
+                }
+                catch (FormatException)
+                {
+                    LogLine("Failed to parse time: " + NextSyncBox.Text);
+                    StartSyncTimer(SyncDurations[FreqTrackBar.Value]);
+                    NextSyncBox.Text = CalculateNextSyncTimeString();
+                }
+                catch (ArgumentException)
+                {
+                    LogLine("Please enter a future time");
+                    StartSyncTimer(SyncDurations[FreqTrackBar.Value]);
+                    NextSyncBox.Text = CalculateNextSyncTimeString();
+                }
+            }
+            else
+            {
+                // need to save the time we are about to edit?
+            }
+        }
+
+        private void NextSyncBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (NextSyncBox.ReadOnly) NextSyncBtn_Click(sender, e);
+        }
+
+        private void NextSyncBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (NextSyncBox.ReadOnly) return;
+            if (e.KeyChar == (char)13) //enter
+            {
+                NextSyncBtn_Click(sender, e);
+            }
         }
 
         private void StoreFSFile()
@@ -299,13 +359,13 @@ namespace MoveCute
 
             Directory.CreateDirectory("MoveCute_data"); //noop if dir exists
             
-            SerializeObject(fsArr, @"MoveCute_data/fs.xml"); // TODO: make const string
+            SerializeObject(fsArr, XML_FILE_PATH);
         }
 
         private void LoadFSFile()
         {
             // TODO: probably do this asynchronously
-            var fsArr = DeSerializeObject<FileSync[]>(@"MoveCute_data/fs.xml");
+            var fsArr = DeSerializeObject<FileSync[]>(XML_FILE_PATH);
             if (fsArr == null)
             {
                 LogLine("No previous configuration found.");
@@ -383,9 +443,9 @@ namespace MoveCute
         /// <returns>The deserialized object after reading the file successfully.</returns>
         public T DeSerializeObject<T>(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName)) { return default(T); }
+            if (string.IsNullOrEmpty(fileName)) { return default; }
 
-            T objectOut = default(T);
+            T objectOut = default;
 
             try
             {

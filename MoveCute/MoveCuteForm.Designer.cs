@@ -43,14 +43,18 @@
             this.FreqLabel = new System.Windows.Forms.Label();
             this.FreqValueDisplay = new System.Windows.Forms.Label();
             this.LogLabel = new System.Windows.Forms.Label();
+            this.NextSyncLbl = new System.Windows.Forms.Label();
+            this.NextSyncBox = new System.Windows.Forms.TextBox();
+            this.NextSyncBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ArrowPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FreqTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // EditBtn
             // 
+            this.EditBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.EditBtn.Enabled = false;
-            this.EditBtn.Location = new System.Drawing.Point(592, 284);
+            this.EditBtn.Location = new System.Drawing.Point(592, 294);
             this.EditBtn.Name = "EditBtn";
             this.EditBtn.Size = new System.Drawing.Size(95, 36);
             this.EditBtn.TabIndex = 1;
@@ -60,20 +64,22 @@
             // 
             // LogBox
             // 
+            this.LogBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LogBox.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.LogBox.Location = new System.Drawing.Point(12, 293);
+            this.LogBox.Location = new System.Drawing.Point(12, 294);
             this.LogBox.MaxLength = 50;
             this.LogBox.Multiline = true;
             this.LogBox.Name = "LogBox";
             this.LogBox.ReadOnly = true;
             this.LogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.LogBox.Size = new System.Drawing.Size(454, 154);
+            this.LogBox.Size = new System.Drawing.Size(470, 188);
             this.LogBox.TabIndex = 7;
             // 
             // SyncBtn
             // 
+            this.SyncBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.SyncBtn.Enabled = false;
-            this.SyncBtn.Location = new System.Drawing.Point(592, 411);
+            this.SyncBtn.Location = new System.Drawing.Point(592, 446);
             this.SyncBtn.Name = "SyncBtn";
             this.SyncBtn.Size = new System.Drawing.Size(95, 36);
             this.SyncBtn.TabIndex = 3;
@@ -98,7 +104,8 @@
             // 
             // AddBtn
             // 
-            this.AddBtn.Location = new System.Drawing.Point(491, 284);
+            this.AddBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddBtn.Location = new System.Drawing.Point(491, 294);
             this.AddBtn.Name = "AddBtn";
             this.AddBtn.Size = new System.Drawing.Size(95, 36);
             this.AddBtn.TabIndex = 0;
@@ -108,8 +115,9 @@
             // 
             // DeleteBtn
             // 
+            this.DeleteBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.DeleteBtn.Enabled = false;
-            this.DeleteBtn.Location = new System.Drawing.Point(693, 284);
+            this.DeleteBtn.Location = new System.Drawing.Point(693, 294);
             this.DeleteBtn.Name = "DeleteBtn";
             this.DeleteBtn.Size = new System.Drawing.Size(95, 36);
             this.DeleteBtn.TabIndex = 2;
@@ -130,7 +138,8 @@
             // 
             // SyncAllBtn
             // 
-            this.SyncAllBtn.Location = new System.Drawing.Point(693, 411);
+            this.SyncAllBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.SyncAllBtn.Location = new System.Drawing.Point(693, 446);
             this.SyncAllBtn.Name = "SyncAllBtn";
             this.SyncAllBtn.Size = new System.Drawing.Size(95, 36);
             this.SyncAllBtn.TabIndex = 4;
@@ -145,11 +154,12 @@
             // 
             // FreqTrackBar
             // 
+            this.FreqTrackBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.FreqTrackBar.LargeChange = 1;
-            this.FreqTrackBar.Location = new System.Drawing.Point(592, 360);
+            this.FreqTrackBar.Location = new System.Drawing.Point(488, 359);
             this.FreqTrackBar.Maximum = 5;
             this.FreqTrackBar.Name = "FreqTrackBar";
-            this.FreqTrackBar.Size = new System.Drawing.Size(196, 45);
+            this.FreqTrackBar.Size = new System.Drawing.Size(164, 45);
             this.FreqTrackBar.TabIndex = 13;
             this.FreqTrackBar.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.FreqTrackBar.Value = 5;
@@ -157,8 +167,9 @@
             // 
             // FreqLabel
             // 
+            this.FreqLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.FreqLabel.AutoSize = true;
-            this.FreqLabel.Location = new System.Drawing.Point(564, 344);
+            this.FreqLabel.Location = new System.Drawing.Point(488, 343);
             this.FreqLabel.Name = "FreqLabel";
             this.FreqLabel.Size = new System.Drawing.Size(112, 13);
             this.FreqLabel.TabIndex = 14;
@@ -166,8 +177,9 @@
             // 
             // FreqValueDisplay
             // 
+            this.FreqValueDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.FreqValueDisplay.AutoSize = true;
-            this.FreqValueDisplay.Location = new System.Drawing.Point(682, 344);
+            this.FreqValueDisplay.Location = new System.Drawing.Point(606, 343);
             this.FreqValueDisplay.Name = "FreqValueDisplay";
             this.FreqValueDisplay.Size = new System.Drawing.Size(73, 13);
             this.FreqValueDisplay.TabIndex = 15;
@@ -183,12 +195,47 @@
             this.LogLabel.TabIndex = 16;
             this.LogLabel.Text = "Event Log";
             // 
+            // NextSyncLbl
+            // 
+            this.NextSyncLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.NextSyncLbl.AutoSize = true;
+            this.NextSyncLbl.Location = new System.Drawing.Point(488, 407);
+            this.NextSyncLbl.Name = "NextSyncLbl";
+            this.NextSyncLbl.Size = new System.Drawing.Size(84, 13);
+            this.NextSyncLbl.TabIndex = 17;
+            this.NextSyncLbl.Text = "Next Auto Sync:";
+            // 
+            // NextSyncBox
+            // 
+            this.NextSyncBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.NextSyncBox.Location = new System.Drawing.Point(578, 404);
+            this.NextSyncBox.Name = "NextSyncBox";
+            this.NextSyncBox.ReadOnly = true;
+            this.NextSyncBox.Size = new System.Drawing.Size(85, 20);
+            this.NextSyncBox.TabIndex = 20;
+            this.NextSyncBox.DoubleClick += new System.EventHandler(this.NextSyncBox_DoubleClick);
+            this.NextSyncBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NextSyncBox_KeyPress);
+            // 
+            // NextSyncBtn
+            // 
+            this.NextSyncBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.NextSyncBtn.Location = new System.Drawing.Point(669, 402);
+            this.NextSyncBtn.Name = "NextSyncBtn";
+            this.NextSyncBtn.Size = new System.Drawing.Size(46, 23);
+            this.NextSyncBtn.TabIndex = 21;
+            this.NextSyncBtn.Text = "Edit";
+            this.NextSyncBtn.UseVisualStyleBackColor = true;
+            this.NextSyncBtn.Click += new System.EventHandler(this.NextSyncBtn_Click);
+            // 
             // MoveCuteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(800, 459);
+            this.ClientSize = new System.Drawing.Size(800, 494);
+            this.Controls.Add(this.NextSyncBtn);
+            this.Controls.Add(this.NextSyncBox);
+            this.Controls.Add(this.NextSyncLbl);
             this.Controls.Add(this.LogLabel);
             this.Controls.Add(this.FreqValueDisplay);
             this.Controls.Add(this.FreqLabel);
@@ -229,6 +276,9 @@
         private System.Windows.Forms.Label FreqLabel;
         private System.Windows.Forms.Label FreqValueDisplay;
         private System.Windows.Forms.Label LogLabel;
+        private System.Windows.Forms.Label NextSyncLbl;
+        private System.Windows.Forms.TextBox NextSyncBox;
+        private System.Windows.Forms.Button NextSyncBtn;
     }
 }
 
