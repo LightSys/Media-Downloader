@@ -44,7 +44,8 @@ namespace MoveCute
         };
 
         private const int LOG_MAX_LENGTH = 3000;
-        private const string TIME_FORMAT = "MMM d, HH:mm";
+        private const string DATETIME_FORMAT = "MMM d, HH:mm";
+        private const string TIME_FORMAT = "HH:mm";
         private const string XML_FILE_PATH = @"MoveCute_data/fs.xml";
 
         public MoveCuteForm()
@@ -67,7 +68,7 @@ namespace MoveCute
             // TODO: avoid scrolling if LogBox has focus
             foreach (string text in texts)
             {
-                string timestamp = "[" + DateTime.Now.ToString(TIME_FORMAT) + "] ";
+                string timestamp = "[" + DateTime.Now.ToString(DATETIME_FORMAT) + "] ";
                 string messsage = timestamp + text + "\r\n";
                 LogBox.AppendText(messsage);
             }
@@ -78,10 +79,10 @@ namespace MoveCute
             {
                 int index = t.IndexOf('\n', t.Length - LOG_MAX_LENGTH);
                 LogBox.Text = t.Substring(index + 1);
+                LogBox.SelectionLength = LogBox.TextLength;
+                LogBox.ScrollToCaret();
             }
 
-            //LogBox.SelectionLength = LogBox.TextLength;
-            //LogBox.ScrollToCaret();
         }
 
         private void SyncList_SelectedIndexChanged(object sender, EventArgs e)
@@ -266,9 +267,8 @@ namespace MoveCute
             LogLine($"Sync Finished: {successes} copied. {upToDates} up-to-date. {failures} failed.");
         }
 
-        private string CalculateNextSyncTimeString()
+        private string CalculateNextTimeString(int duration)
         {
-            int duration = SyncDurations[FreqTrackBar.Value];
             if (duration < 0) return "";
             DateTime nextScheduled = DateTime.Now.AddMilliseconds(duration);
             return nextScheduled.ToString(TIME_FORMAT);
@@ -286,8 +286,17 @@ namespace MoveCute
         {
             LogLine("Starting Auto Sync...");
             SyncAllBtn_Click(sender, e);
-            StartSyncTimer(SyncDurations[FreqTrackBar.Value]);
-            NextSyncBox.Text = CalculateNextSyncTimeString();
+            var now = DateTime.Now;
+            var last = DateTime.ParseExact(NextSyncBox.Text, TIME_FORMAT, new CultureInfo("en-US"));
+            var next = last.AddMilliseconds(SyncDurations[FreqTrackBar.Value]);
+            var duration = next - now;
+            //TODO: duration could be negative if sync takes too long (like reallly long).
+
+            int ms = (int)duration.TotalMilliseconds;
+            StartSyncTimer(ms);
+            NextSyncBox.Text = CalculateNextTimeString(ms);
+            NextSyncBox.Enabled = false;
+            NextSyncBtn.Text = "Edit";
         }
 
         private void FreqTrackBar_Scroll(object sender, EventArgs e)
@@ -300,56 +309,63 @@ namespace MoveCute
             FreqValueDisplay.Text = title;
 
             StartSyncTimer(duration);
-            NextSyncBox.Text = CalculateNextSyncTimeString();
+            NextSyncBox.Text = CalculateNextTimeString(duration);
+            NextSyncBox.Enabled = false;
+            NextSyncBtn.Text = "Edit";
         }
 
         private void NextSyncBtn_Click(object sender, EventArgs e)
         {
-            bool saving = !NextSyncBox.ReadOnly;
+            bool saving = NextSyncBox.Enabled;
             //switch state
             NextSyncBtn.Text = saving ? "Edit" : "Save";
-            NextSyncBox.ReadOnly = saving;
+            NextSyncBox.Enabled = !saving;
 
             if (saving)
             {
                 try
                 {
-                    DateTime next = DateTime.ParseExact(NextSyncBox.Text, TIME_FORMAT, new CultureInfo("en-US"));
-                    TimeSpan duration = next - DateTime.Now;
-                    if (duration.TotalMilliseconds <= 1000) throw new ArgumentException();
+                    var now = DateTime.Now;
+                    var next = DateTime.ParseExact(NextSyncBox.Text, TIME_FORMAT, new CultureInfo("en-US"));
+                    var duration = next - now;
+                    if (duration.TotalMilliseconds < 0) duration = duration.Add(TimeSpan.FromDays(1));
                     StartSyncTimer((int)duration.TotalMilliseconds);
-                    LogLine($"Sync scheduled for {duration.Hours} hours and {duration.Minutes} minutes from now.");
+                    //TODO: proper string pluralization
+                    int m = (int)Math.Round(duration.TotalMinutes);
+                    int h = m / 60;
+                    m = m % 60;
+                    LogLine($"Sync scheduled for {h} hours and {m} minutes from now.");
                 }
                 catch (FormatException)
                 {
                     LogLine("Failed to parse time: " + NextSyncBox.Text);
-                    StartSyncTimer(SyncDurations[FreqTrackBar.Value]);
-                    NextSyncBox.Text = CalculateNextSyncTimeString();
-                }
-                catch (ArgumentException)
-                {
-                    LogLine("Please enter a future time");
-                    StartSyncTimer(SyncDurations[FreqTrackBar.Value]);
-                    NextSyncBox.Text = CalculateNextSyncTimeString();
+                    //TODO: this might be wrong. maybe should avoid changing timer and just find the right thing to put in the box.
+                    int duration = SyncDurations[FreqTrackBar.Value];
+                    StartSyncTimer(duration);
+                    NextSyncBox.Text = CalculateNextTimeString(duration);
                 }
             }
             else
             {
                 // need to save the time we are about to edit?
+                NextSyncBox.Focus();
             }
         }
 
         private void NextSyncBox_DoubleClick(object sender, EventArgs e)
         {
-            if (NextSyncBox.ReadOnly) NextSyncBtn_Click(sender, e);
+            //TODO: can't double click disabled box
+            if (!NextSyncBox.Enabled) NextSyncBtn_Click(sender, e);
         }
 
         private void NextSyncBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (NextSyncBox.ReadOnly) return;
+            if (!NextSyncBox.Enabled) return;
             if (e.KeyChar == (char)13) //enter
             {
                 NextSyncBtn_Click(sender, e);
+                e.Handled = true;
+                //NextSyncBtn.Focus();
             }
         }
 

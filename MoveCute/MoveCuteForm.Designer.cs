@@ -201,17 +201,17 @@
             this.NextSyncLbl.AutoSize = true;
             this.NextSyncLbl.Location = new System.Drawing.Point(488, 407);
             this.NextSyncLbl.Name = "NextSyncLbl";
-            this.NextSyncLbl.Size = new System.Drawing.Size(84, 13);
+            this.NextSyncLbl.Size = new System.Drawing.Size(110, 13);
             this.NextSyncLbl.TabIndex = 17;
-            this.NextSyncLbl.Text = "Next Auto Sync:";
+            this.NextSyncLbl.Text = "Next Auto Sync Time:";
             // 
             // NextSyncBox
             // 
             this.NextSyncBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NextSyncBox.Location = new System.Drawing.Point(578, 404);
+            this.NextSyncBox.Enabled = false;
+            this.NextSyncBox.Location = new System.Drawing.Point(604, 404);
             this.NextSyncBox.Name = "NextSyncBox";
-            this.NextSyncBox.ReadOnly = true;
-            this.NextSyncBox.Size = new System.Drawing.Size(85, 20);
+            this.NextSyncBox.Size = new System.Drawing.Size(48, 20);
             this.NextSyncBox.TabIndex = 20;
             this.NextSyncBox.DoubleClick += new System.EventHandler(this.NextSyncBox_DoubleClick);
             this.NextSyncBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NextSyncBox_KeyPress);
@@ -219,7 +219,7 @@
             // NextSyncBtn
             // 
             this.NextSyncBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NextSyncBtn.Location = new System.Drawing.Point(669, 402);
+            this.NextSyncBtn.Location = new System.Drawing.Point(658, 401);
             this.NextSyncBtn.Name = "NextSyncBtn";
             this.NextSyncBtn.Size = new System.Drawing.Size(46, 23);
             this.NextSyncBtn.TabIndex = 21;
