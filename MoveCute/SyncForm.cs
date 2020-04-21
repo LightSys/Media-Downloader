@@ -79,7 +79,7 @@ namespace MoveCute
             }
 
             if (filePath == "") WarnLbl.Text = "Macro doesn't match anything.";
-            else if (filePath == SrcBox.Text) WarnLbl.Text = "A single file is selected.";
+            else if (filePath == SrcBox.Text) WarnLbl.Text = "No macro entered.";
             else WarnLbl.Text = "";
 
             SampleBox.Text = filePath;
