@@ -18,9 +18,12 @@ As mentioned before, this does not actually download anything, and instead relie
 It is designed to be generic, however, and could be part of any number of workflows.
 
 ### TODO:
+* Better logging details
+	* Write to logging file (with auto-trimming)
+	* Specify failures
 * FileSync Priority Option
 	* FileSyncs could have the capability to specify which file it will select when it matches multiple files. (earliest modified, closest to today, most recent, most recently updated)
- * FileSync Stores and Displays error
+* FileSync Stores and Displays error
 	* Error should be added at the FileSync level so users can quickly figure out what went wrong
 * Support '/' syntax (unix style)
 	* Treat all forward slashes '/' the same way as backslashes '\'
