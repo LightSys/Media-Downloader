@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
@@ -98,7 +93,7 @@ namespace MoveCute
             ListBox list = (ListBox)sender;
 
             if (e.Index < 0) return;
-            FileSync fs = (FileSync)list.Items[e.Index];
+             FileSync fs = (FileSync)list.Items[e.Index];
 
             e.DrawBackground();
             e.DrawFocusRectangle();
@@ -202,8 +197,8 @@ namespace MoveCute
             {
                 string srcPath = fs.SrcPath; // calculates from SrcMacro
                 string destPath = fs.DestPath;
-                if (string.IsNullOrWhiteSpace(srcPath)) throw new Exception($"Macro didn't match anything.");
-                if (!File.Exists(srcPath)) throw new Exception($"{srcPath} doesn't exist.");
+                if (string.IsNullOrWhiteSpace(srcPath)) throw new Exception("Source file not found.");
+                if (!File.Exists(srcPath)) throw new Exception($"Source file {srcPath} doesn't exist.");
 
                 if (File.Exists(destPath))
                 {
@@ -221,7 +216,7 @@ namespace MoveCute
             }
             catch (Exception ex)
             {
-                message = $"Failed to copy to {fs.DestPath}:" + ex.Message;
+                message = $"Failed to copy to {fs.DestPath}: " + ex.Message;
                 return CopyResult.Fail;
             }
         }
@@ -245,9 +240,13 @@ namespace MoveCute
             int successes = 0;
             int upToDates = 0;
             int failures = 0;
+
+            string statusMsg;
+            string failureMsgs = "";
+
             foreach (FileSync fs in SyncList.Items)
             {
-                CopyResult copyResult = CopyFile(fs, out _);
+                CopyResult copyResult = CopyFile(fs, out statusMsg);
 
                 switch (copyResult)
                 {
@@ -259,12 +258,15 @@ namespace MoveCute
                         break;
                     case CopyResult.Fail:
                         failures++;
+                        failureMsgs += statusMsg + "\r\n";
                         break;
                 }
             }
-            //TODO: get message from CopyFile, save to log file
 
             LogLine($"Sync Finished: {successes} copied. {upToDates} up-to-date. {failures} failed.");
+            if (failures != 0)
+                LogLine("Failure messages: \r\n" + failureMsgs);
+            
         }
 
         private string CalculateNextTimeString(int duration)
